@@ -90,6 +90,16 @@ const templates = [
         verseId: 6
     }
 ];
+// Clear all stored data on each page load
+window.addEventListener('load', function() {
+  localStorage.clear();
+  sessionStorage.clear();
+
+  // Optional: clear all form fields too
+  const forms = document.querySelectorAll('form');
+  forms.forEach(form => form.reset());
+});
+
 
 // Application State
 let currentSection = 'welcome';
