@@ -414,42 +414,32 @@ function saveProgress() {
     }
 }
 
-function printProfile() {
-    console.log('Print profile called');
-    
+// Single function for downloading the profile as a PDF
+function downloadPDF() {
+    console.log('Download PDF called');
+
     try {
-        // Ensure we're in preview section and data is ready
+        // Check if we’re currently on the preview section
         if (currentSection !== 'preview') {
             switchToSection('preview');
-            // Wait a moment for the preview to generate
+            // Wait briefly to allow the preview to render
             setTimeout(() => {
+                generatePreview();
                 window.print();
             }, 1000);
         } else {
+            // Regenerate preview just before printing
             generatePreview();
             setTimeout(() => {
                 window.print();
             }, 500);
         }
-        
-    } catch (error) {
-        console.error('Error printing profile:', error);
-        showMessage('Could not print profile. Please try again.', 'error');
-    }
-}
-
-function downloadPDF() {
-    console.log('Download PDF called');
-    
-    try {
-        // Same as print - browsers handle PDF generation
-        printProfile();
-        
     } catch (error) {
         console.error('Error downloading PDF:', error);
         showMessage('Could not download PDF. Please try again.', 'error');
     }
 }
+
 
 function setupAllEventListeners() {
     console.log('Setting up all event listeners...');
