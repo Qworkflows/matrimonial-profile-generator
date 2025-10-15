@@ -152,7 +152,6 @@ function setupGlobalFunctions() {
     window.changePhoto = changePhoto;
     window.saveProgress = saveProgress;
     window.downloadPDF = downloadPDF;
-    window.printProfile = printProfile;
     
     console.log('Global functions set up');
 }
