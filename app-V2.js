@@ -414,29 +414,44 @@ function saveProgress() {
     }
 }
 
-// Single function for downloading the profile as a PDF
+let isPrinting = false; // prevents multiple triggers
+
 function downloadPDF() {
     console.log('Download PDF called');
 
+    // If already printing, skip duplicate trigger
+    if (isPrinting) return;
+    isPrinting = true;
+
     try {
-        // Check if we’re currently on the preview section
         if (currentSection !== 'preview') {
             switchToSection('preview');
-            // Wait briefly to allow the preview to render
             setTimeout(() => {
-                generatePreview();
-                window.print();
+                generatePreviewSafely();
             }, 1000);
         } else {
-            // Regenerate preview just before printing
-            generatePreview();
-            setTimeout(() => {
-                window.print();
-            }, 500);
+            generatePreviewSafely();
         }
     } catch (error) {
         console.error('Error downloading PDF:', error);
         showMessage('Could not download PDF. Please try again.', 'error');
+        isPrinting = false;
+    }
+
+    // reset after 3 seconds so you can print again later
+    setTimeout(() => { isPrinting = false; }, 3000);
+}
+
+// Helper: generate preview and print once
+function generatePreviewSafely() {
+    try {
+        generatePreview();
+        // small delay to ensure the DOM renders fully
+        setTimeout(() => {
+            window.print();
+        }, 500);
+    } catch (e) {
+        console.error('Error generating preview:', e);
     }
 }
 
