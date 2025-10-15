@@ -1,3 +1,13 @@
+// 🔥 Force-clear stored data on every page load
+localStorage.clear();
+sessionStorage.clear();
+
+// Optional: clear all form fields after DOM is ready
+window.addEventListener('DOMContentLoaded', function() {
+  const forms = document.querySelectorAll('form');
+  forms.forEach(form => form.reset());
+});
+
 // Islamic Matrimonial Profile Builder - JavaScript
 
 // Application Data
@@ -90,16 +100,6 @@ const templates = [
         verseId: 6
     }
 ];
-// Clear all stored data on each page load
-window.addEventListener('load', function() {
-  localStorage.clear();
-  sessionStorage.clear();
-
-  // Optional: clear all form fields too
-  const forms = document.querySelectorAll('form');
-  forms.forEach(form => form.reset());
-});
-
 
 // Application State
 let currentSection = 'welcome';
