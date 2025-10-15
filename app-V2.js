@@ -416,32 +416,31 @@ function saveProgress() {
 
 let isPrinting = false; // prevents multiple triggers
 
-function downloadPDF() {
-    console.log('Download PDF called');
-
-    // If already printing, skip duplicate trigger
-    if (isPrinting) return;
-    isPrinting = true;
-
-    try {
-        if (currentSection !== 'preview') {
-            switchToSection('preview');
-            setTimeout(() => {
-                generatePreviewSafely();
-            }, 1000);
-        } else {
-            generatePreviewSafely();
-        }
-    } catch (error) {
-        console.error('Error downloading PDF:', error);
-        showMessage('Could not download PDF. Please try again.', 'error');
-        isPrinting = false;
-    }
-
-    // reset after 3 seconds so you can print again later
-    setTimeout(() => { isPrinting = false; }, 3000);
+function generatePDF() {  // Replace with your actual function name
+    const { jsPDF } = window.jspdf;  // Assuming jsPDF is loaded via CDN
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    
+    // Your existing PDF content generation code here (e.g., doc.text(), doc.addImage(), etc.)
+    // Example: doc.text('Your profile content', 10, 10);
+    
+    // Generate the PDF as a blob (this avoids data URL issues)
+    const pdfBlob = doc.output('blob');
+    
+    // Create a temporary download link
+    const downloadUrl = URL.createObjectURL(pdfBlob);
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = 'Matrimonial_Profile.pdf';  // Customize filename as needed
+    link.target = '_blank';  // Ensures it opens in a new tab if needed, but focuses on download
+    
+    // Trigger the download
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Clean up the URL to prevent memory leaks
+    URL.revokeObjectURL(downloadUrl);
 }
-
 // Helper: generate preview and print once
 function generatePreviewSafely() {
     try {
